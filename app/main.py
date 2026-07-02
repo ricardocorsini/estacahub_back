@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.health import router as health_router
+from app.routers.obras_routers import router as obras_router
 
 app = FastAPI(
     title="Backend Padrão",
@@ -25,9 +26,15 @@ app.add_middleware(
 # Include routers
 # =====================
 
-app.include_router(health_router, 
-                   prefix="/api",
-                   )
+app.include_router(
+    health_router,
+    prefix="/api",
+)
+
+app.include_router(
+    obras_router,
+    prefix="/api",
+)
 
 
 @app.get("/", tags=["root"])
@@ -35,5 +42,6 @@ def root() -> dict[str, str]:
     return {
         "message": "Backend rodando com sucesso.",
         "docs": "/docs",
-        "health": "/health",
+        "health": "/api/health",
+        "obras": "/api/obras",
     }

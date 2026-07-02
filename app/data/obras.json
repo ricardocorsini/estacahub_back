@@ -1,0 +1,28 @@
+[
+  {
+    "id": 2,
+    "nome": "Edifício Residencial - Cohabbbbbbbbb",
+    "numero": "2026-152",
+    "localizacao": "São Luís/MA",
+    "dataCadastro": "2026-07-01",
+    "sistemaCoordenadas": "local",
+    "responsavelTecnico": "Ricardo Corsini / CREA 123456",
+    "observacoes": "Teste dois! =)",
+    "legendaFoto": "Fachada principal da obra.",
+    "criadoEm": "2026-07-01T23:56:56.021073+00:00",
+    "atualizadoEm": "2026-07-02T00:26:58.463140+00:00"
+  },
+  {
+    "id": 3,
+    "nome": "Obra - Teste - 01",
+    "numero": "001",
+    "localizacao": "São Paulo/SP",
+    "dataCadastro": "2026-07-01",
+    "sistemaCoordenadas": "local",
+    "responsavelTecnico": "Ricardo/0001",
+    "observacoes": "Estamos testando aqui a integração do front e back. Vamos ver se isso vai funcionar! :)",
+    "legendaFoto": null,
+    "criadoEm": "2026-07-02T00:24:44.680994+00:00",
+    "atualizadoEm": "2026-07-02T00:24:44.680994+00:00"
+  }
+]
