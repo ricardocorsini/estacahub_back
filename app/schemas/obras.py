@@ -1,37 +1,100 @@
-from typing import Literal, Optional
+from datetime import date, datetime
+from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+
 
 class ObraBase(BaseModel):
-    nome: str = Field(..., min_length=1)
-    numero: Optional[str] = None
-    localizacao: Optional[str] = None
-    dataCadastro: Optional[str] = None
-    sistemaCoordenadas: Literal["local", "utm"] = "local"
-    responsavelTecnico: Optional[str] = None
-    observacoes: Optional[str] = None
-    legendaFoto: Optional[str] = None
+    nome: str = Field(min_length=1, max_length=200)
+    numero: str | None = Field(default=None, max_length=50)
+    localizacao: str | None = Field(default=None, max_length=255)
+    data_cadastro: date | None = Field(
+        default=None,
+        alias="dataCadastro",
+    )
+    sistema_coordenadas: Literal["local", "utm"] = Field(
+        default="local",
+        alias="sistemaCoordenadas",
+    )
+    responsavel_tecnico: str | None = Field(
+        default=None,
+        alias="responsavelTecnico",
+        max_length=255,
+    )
+    observacoes: str | None = None
+    legenda_foto: str | None = Field(
+        default=None,
+        alias="legendaFoto",
+        max_length=255,
+    )
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        str_strip_whitespace=True,
+    )
 
 
 class ObraCreate(ObraBase):
-    pass
+    # Metadado temporário. O arquivo ainda não é enviado.
+    nome_arquivo_foto: str | None = Field(
+        default=None,
+        alias="nomeArquivoFoto",
+        max_length=255,
+    )
 
 
 class ObraUpdate(BaseModel):
-    nome: Optional[str] = Field(default=None, min_length=1)
-    numero: Optional[str] = None
-    localizacao: Optional[str] = None
-    dataCadastro: Optional[str] = None
-    sistemaCoordenadas: Optional[Literal["local", "utm"]] = None
-    responsavelTecnico: Optional[str] = None
-    observacoes: Optional[str] = None
-    legendaFoto: Optional[str] = None
+    nome: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=200,
+    )
+    numero: str | None = Field(default=None, max_length=50)
+    localizacao: str | None = Field(default=None, max_length=255)
+    data_cadastro: date | None = Field(
+        default=None,
+        alias="dataCadastro",
+    )
+    sistema_coordenadas: Literal["local", "utm"] | None = Field(
+        default=None,
+        alias="sistemaCoordenadas",
+    )
+    responsavel_tecnico: str | None = Field(
+        default=None,
+        alias="responsavelTecnico",
+        max_length=255,
+    )
+    observacoes: str | None = None
+    legenda_foto: str | None = Field(
+        default=None,
+        alias="legendaFoto",
+        max_length=255,
+    )
+    nome_arquivo_foto: str | None = Field(
+        default=None,
+        alias="nomeArquivoFoto",
+        max_length=255,
+    )
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        str_strip_whitespace=True,
+    )
 
 
 class ObraResponse(ObraBase):
     id: int
-    criadoEm: str
-    atualizadoEm: str
+    foto_url: str | None = Field(
+        default=None,
+        alias="fotoUrl",
+    )
+    criado_em: datetime = Field(alias="criadoEm")
+    atualizado_em: datetime = Field(alias="atualizadoEm")
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+    )
 
 
 class ObraDeleteResponse(BaseModel):

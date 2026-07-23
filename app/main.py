@@ -1,30 +1,30 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.core.config import get_settings
 from app.routers.health import router as health_router
 from app.routers.obras_routers import router as obras_router
 
-app = FastAPI(
-    title="Backend Padrão",
-    description="Estrutura inicial de backend em Python com FastAPI.",
-    version="0.1.0",
-)
 
-# =====================
-# Middlewares
-# =====================
+settings = get_settings()
+
+app = FastAPI(
+    title=settings.app_name,
+    description=(
+        "API local do projeto Engenharia Fullstack, "
+        "com persistência em PostgreSQL."
+    ),
+    version=settings.app_version,
+    debug=settings.debug,
+)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# =====================
-# Include routers
-# =====================
 
 app.include_router(
     health_router,

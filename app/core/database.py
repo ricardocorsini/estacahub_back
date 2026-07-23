@@ -1,6 +1,35 @@
-# Arquivo reservado para configuração futura do banco de dados.
-#
-# Exemplos futuros:
-# - engine do SQLAlchemy / SQLModel
-# - sessão do banco
-# - dependência get_session
+from collections.abc import Generator
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+
+from app.core.config import get_settings
+
+
+settings = get_settings()
+
+engine = create_engine(
+    settings.database_url,
+    echo=settings.sql_echo,
+    pool_pre_ping=True,
+)
+
+SessionLocal = sessionmaker(
+    bind=engine,
+    class_=Session,
+    autoflush=False,
+    expire_on_commit=False,
+)
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+def get_db() -> Generator[Session, None, None]:
+    db = SessionLocal()
+
+    try:
+        yield db
+    finally:
+        db.close()

@@ -1,164 +1,143 @@
-import json
-from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from uuid import uuid4
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
+from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
+from app.models.obra import Obra
 from app.schemas.obras import ObraCreate, ObraUpdate
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
-OBRAS_FILE = DATA_DIR / "obras.json"
+FAKE_S3_BUCKET = "engenharia-fullstack-local"
+FAKE_S3_REGION = "sa-east-1"
 
 
-def _ensure_storage_exists() -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+def _obter_obra_ou_404(db: Session, obra_id: int) -> Obra:
+    obra = db.get(Obra, obra_id)
 
-    if not OBRAS_FILE.exists():
-        OBRAS_FILE.write_text("[]", encoding="utf-8")
+    if obra is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Obra não encontrada.",
+        )
+
+    return obra
 
 
-def _read_obras() -> list[dict[str, Any]]:
-    _ensure_storage_exists()
+def _gerar_url_s3_ficticia(nome_arquivo: str) -> str:
+    extensao = Path(nome_arquivo).suffix.lower()
 
+    if extensao not in {".jpg", ".jpeg", ".png", ".webp"}:
+        extensao = ".jpg"
+
+    chave = f"obras/{uuid4()}{extensao}"
+
+    return (
+        f"https://{FAKE_S3_BUCKET}.s3."
+        f"{FAKE_S3_REGION}.amazonaws.com/{chave}"
+    )
+
+
+def _commit(db: Session) -> None:
     try:
-        content = OBRAS_FILE.read_text(encoding="utf-8")
-        return json.loads(content)
-    except json.JSONDecodeError:
-        return []
+        db.commit()
+    except SQLAlchemyError as exc:
+        db.rollback()
+
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Não foi possível salvar os dados da obra.",
+        ) from exc
 
 
-def _write_obras(obras: list[dict[str, Any]]) -> None:
-    _ensure_storage_exists()
+def listar_obras_service(db: Session) -> list[Obra]:
+    statement = select(Obra).order_by(Obra.id.desc())
+    return list(db.scalars(statement).all())
 
-    OBRAS_FILE.write_text(
-        json.dumps(obras, ensure_ascii=False, indent=2),
-        encoding="utf-8",
+
+def obter_obra_service(db: Session, obra_id: int) -> Obra:
+    return _obter_obra_ou_404(db, obra_id)
+
+
+def criar_obra_service(
+    db: Session,
+    payload: ObraCreate,
+) -> Obra:
+    dados = payload.model_dump()
+    nome_arquivo_foto = dados.pop("nome_arquivo_foto", None)
+
+    nova_obra = Obra(
+        **dados,
+        foto_url=(
+            _gerar_url_s3_ficticia(nome_arquivo_foto)
+            if nome_arquivo_foto
+            else None
+        ),
     )
 
-
-def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
-
-
-def _next_id(obras: list[dict[str, Any]]) -> int:
-    if not obras:
-        return 1
-
-    return max(obra["id"] for obra in obras) + 1
-
-
-def _model_to_dict(model: Any, exclude_unset: bool = False) -> dict[str, Any]:
-    """
-    Compatível com Pydantic v1 e v2.
-    """
-    if hasattr(model, "model_dump"):
-        return model.model_dump(exclude_unset=exclude_unset)
-
-    return model.dict(exclude_unset=exclude_unset)
-
-
-def listar_obras_service() -> list[dict[str, Any]]:
-    return _read_obras()
-
-
-def obter_obra_service(obra_id: int) -> dict[str, Any]:
-    obras = _read_obras()
-
-    for obra in obras:
-        if obra["id"] == obra_id:
-            return obra
-
-    raise HTTPException(
-        status_code=404,
-        detail="Obra não encontrada.",
-    )
-
-
-def criar_obra_service(payload: ObraCreate) -> dict[str, Any]:
-    obras = _read_obras()
-
-    now = _now_iso()
-
-    nova_obra = {
-        "id": _next_id(obras),
-        **_model_to_dict(payload),
-        "criadoEm": now,
-        "atualizadoEm": now,
-    }
-
-    obras.append(nova_obra)
-    _write_obras(obras)
+    db.add(nova_obra)
+    _commit(db)
+    db.refresh(nova_obra)
 
     return nova_obra
 
 
-def atualizar_obra_service(obra_id: int, payload: ObraCreate) -> dict[str, Any]:
-    obras = _read_obras()
+def atualizar_obra_service(
+    db: Session,
+    obra_id: int,
+    payload: ObraCreate,
+) -> Obra:
+    obra = _obter_obra_ou_404(db, obra_id)
 
-    for index, obra in enumerate(obras):
-        if obra["id"] == obra_id:
-            obra_atualizada = {
-                "id": obra_id,
-                **_model_to_dict(payload),
-                "criadoEm": obra["criadoEm"],
-                "atualizadoEm": _now_iso(),
-            }
+    dados = payload.model_dump()
+    nome_arquivo_foto = dados.pop("nome_arquivo_foto", None)
 
-            obras[index] = obra_atualizada
-            _write_obras(obras)
+    for campo, valor in dados.items():
+        setattr(obra, campo, valor)
 
-            return obra_atualizada
+    if nome_arquivo_foto:
+        obra.foto_url = _gerar_url_s3_ficticia(nome_arquivo_foto)
 
-    raise HTTPException(
-        status_code=404,
-        detail="Obra não encontrada.",
-    )
+    _commit(db)
+    db.refresh(obra)
+
+    return obra
 
 
 def atualizar_obra_parcial_service(
+    db: Session,
     obra_id: int,
     payload: ObraUpdate,
-) -> dict[str, Any]:
-    obras = _read_obras()
+) -> Obra:
+    obra = _obter_obra_ou_404(db, obra_id)
 
-    dados_atualizacao = _model_to_dict(payload, exclude_unset=True)
+    dados = payload.model_dump(exclude_unset=True)
+    nome_arquivo_foto = dados.pop("nome_arquivo_foto", None)
 
-    for index, obra in enumerate(obras):
-        if obra["id"] == obra_id:
-            obra_atualizada = {
-                **obra,
-                **dados_atualizacao,
-                "atualizadoEm": _now_iso(),
-            }
+    for campo, valor in dados.items():
+        setattr(obra, campo, valor)
 
-            obras[index] = obra_atualizada
-            _write_obras(obras)
+    if nome_arquivo_foto:
+        obra.foto_url = _gerar_url_s3_ficticia(nome_arquivo_foto)
 
-            return obra_atualizada
+    _commit(db)
+    db.refresh(obra)
 
-    raise HTTPException(
-        status_code=404,
-        detail="Obra não encontrada.",
-    )
+    return obra
 
 
-def remover_obra_service(obra_id: int) -> dict[str, Any]:
-    obras = _read_obras()
+def remover_obra_service(
+    db: Session,
+    obra_id: int,
+) -> dict[str, str | int]:
+    obra = _obter_obra_ou_404(db, obra_id)
 
-    for obra in obras:
-        if obra["id"] == obra_id:
-            obras.remove(obra)
-            _write_obras(obras)
+    db.delete(obra)
+    _commit(db)
 
-            return {
-                "message": "Obra removida com sucesso.",
-                "id": obra_id,
-            }
-
-    raise HTTPException(
-        status_code=404,
-        detail="Obra não encontrada.",
-    )
+    return {
+        "message": "Obra removida com sucesso.",
+        "id": obra_id,
+    }
