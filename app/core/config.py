@@ -10,30 +10,59 @@ class Settings(BaseSettings):
         default="Engenharia Fullstack API",
         validation_alias="APP_NAME",
     )
+
     app_version: str = Field(
         default="0.2.0",
         validation_alias="APP_VERSION",
     )
+
     debug: bool = Field(
         default=True,
         validation_alias="DEBUG",
     )
+
     sql_echo: bool = Field(
         default=False,
         validation_alias="SQL_ECHO",
     )
 
-    postgres_user: str = Field(validation_alias="POSTGRES_USER")
-    postgres_password: str = Field(validation_alias="POSTGRES_PASSWORD")
-    postgres_db: str = Field(validation_alias="POSTGRES_DB")
+    # ==========================================================
+    # PostgreSQL
+    # ==========================================================
+
+    postgres_user: str = Field(
+        validation_alias="POSTGRES_USER",
+    )
+
+    postgres_password: str = Field(
+        validation_alias="POSTGRES_PASSWORD",
+    )
+
+    postgres_db: str = Field(
+        validation_alias="POSTGRES_DB",
+    )
+
+    # IMPORTANTE:
+    # Dentro do Docker Compose, o hostname é o nome do serviço.
+    # Portanto:
+    #   postgres -> container PostgreSQL
+    #
+    # Não usar "localhost" quando a API também estiver
+    # executando dentro de um container.
     postgres_host: str = Field(
-        default="localhost",
+        default="postgres",
         validation_alias="POSTGRES_HOST",
     )
+
+    # Porta INTERNA do PostgreSQL na rede Docker.
     postgres_port: int = Field(
         default=5432,
         validation_alias="POSTGRES_PORT",
     )
+
+    # ==========================================================
+    # CORS
+    # ==========================================================
 
     cors_origins_value: str = Field(
         default="http://localhost:5173,http://127.0.0.1:5173",
