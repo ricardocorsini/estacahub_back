@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
 from app.core.database import init_db
+from app.routers.auth import router as auth_router
 from app.routers.health import router as health_router
 from app.routers.obras_routers import router as obras_router
 
@@ -67,6 +68,11 @@ app.include_router(
 )
 
 app.include_router(
+    auth_router,
+    prefix="/api",
+)
+
+app.include_router(
     obras_router,
     prefix="/api",
 )
@@ -82,5 +88,6 @@ def root() -> dict[str, str]:
         "message": "Backend rodando com sucesso.",
         "docs": "/docs",
         "health": "/api/health",
+        "auth": "/api/auth/login",
         "obras": "/api/obras",
     }

@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 
@@ -65,8 +65,40 @@ class Settings(BaseSettings):
     # ==========================================================
 
     cors_origins_value: str = Field(
-        default="http://localhost:5173,http://127.0.0.1:5173",
+        default=(
+            "https://www.estacahub.com,https://estacahub.com,"
+            "http://localhost:5173,http://127.0.0.1:5173"
+        ),
         validation_alias="CORS_ORIGINS",
+    )
+
+    # ==========================================================
+    # Autenticação
+    # ==========================================================
+
+    jwt_secret_key: SecretStr = Field(
+        validation_alias="JWT_SECRET_KEY",
+    )
+
+    jwt_algorithm: str = Field(
+        default="HS256",
+        validation_alias="JWT_ALGORITHM",
+    )
+
+    access_token_expire_minutes: int = Field(
+        default=1440,
+        gt=0,
+        validation_alias="ACCESS_TOKEN_EXPIRE_MINUTES",
+    )
+
+    auth_cookie_name: str = Field(
+        default="estacahub_access_token",
+        validation_alias="AUTH_COOKIE_NAME",
+    )
+
+    auth_cookie_secure: bool | None = Field(
+        default=None,
+        validation_alias="AUTH_COOKIE_SECURE",
     )
 
     model_config = SettingsConfigDict(
@@ -94,6 +126,18 @@ class Settings(BaseSettings):
             for origin in self.cors_origins_value.split(",")
             if origin.strip()
         ]
+
+    @property
+    def cookie_secure(self) -> bool:
+        """
+        Usa cookie seguro em produção e permite HTTP no desenvolvimento.
+        AUTH_COOKIE_SECURE pode sobrescrever o comportamento automático.
+        """
+
+        if self.auth_cookie_secure is not None:
+            return self.auth_cookie_secure
+
+        return not self.debug
 
 
 @lru_cache

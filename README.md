@@ -1,95 +1,46 @@
-# Backend Padrão com FastAPI
+# EstacaHub API
 
-Estrutura inicial de backend em Python usando FastAPI.
+Backend FastAPI com PostgreSQL e autenticação JWT por cookie `HttpOnly`.
 
-## Estrutura
+## Configuração
 
-```text
-.
-├── app/
-│   ├── core/
-│   │   └── __init__.py
-│   ├── models/
-│   │   └── __init__.py
-│   ├── routers/
-│   │   ├── __init__.py
-│   │   └── health.py
-│   ├── schemas/
-│   │   ├── __init__.py
-│   │   └── health.py
-│   ├── services/
-│   │   └── __init__.py
-│   ├── __init__.py
-│   └── main.py
-├── .env
-├── .gitignore
-├── Dockerfile
-├── docker-compose.yml
-└── README.md
-```
+1. Copie `.env.example` para `.env`.
+2. Gere uma chave exclusiva com `openssl rand -hex 32` e defina `JWT_SECRET_KEY`.
+3. Em produção, use `DEBUG=false` e `AUTH_COOKIE_SECURE=true`.
+4. Instale as dependências com `pip install -r requirements.txt`.
 
-## Como rodar localmente
+O frontend oficial já está liberado no CORS:
 
-Crie e ative um ambiente virtual:
+- `https://www.estacahub.com`
+- `https://estacahub.com`
+
+## Execução
+
+Com Docker Compose:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+docker compose up --build
 ```
 
-No Windows:
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-```
-
-Instale as dependências iniciais:
-
-```bash
-pip install fastapi uvicorn
-```
-
-Rode a aplicação:
+Ou, com o PostgreSQL já disponível:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-A API ficará disponível em:
+Na inicialização, `init_db()` cria o schema `app` e qualquer tabela ausente. O
+novo model cria automaticamente `app.usuarios`; nenhuma senha em texto puro é
+armazenada.
 
-```text
-http://localhost:8000
-```
+## Rotas de autenticação
 
-Documentação automática:
+- `POST /api/auth/register` — cria a conta e inicia a sessão.
+- `POST /api/auth/login` — autentica e inicia a sessão.
+- `GET /api/auth/me` — retorna o usuário autenticado.
+- `POST /api/auth/logout` — remove o cookie da sessão.
 
-```text
-http://localhost:8000/docs
-```
+As rotas `/api/obras` exigem autenticação. Navegadores usam automaticamente o
+cookie `HttpOnly`; outros clientes podem enviar o mesmo JWT em
+`Authorization: Bearer <token>`.
 
-## Rota inicial
-
-Health check:
-
-```http
-GET /health
-```
-
-Resposta esperada:
-
-```json
-{
-  "status": "ok",
-  "service": "backend",
-  "version": "0.1.0"
-}
-```
-
-## Gerar requirements.txt depois
-
-Como este ZIP não inclui `requirements.txt`, após instalar as dependências no ambiente virtual, gere o arquivo com:
-
-```bash
-pip freeze > requirements.txt
-```
+Documentação interativa: `http://localhost:8000/docs`.

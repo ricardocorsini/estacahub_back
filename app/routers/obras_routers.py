@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.security import get_current_user
 from app.schemas.obras import (
     ObraCreate,
     ObraDeleteResponse,
@@ -23,6 +24,7 @@ from app.services.obras_service import (
 router = APIRouter(
     prefix="/obras",
     tags=["obras"],
+    dependencies=[Depends(get_current_user)],
 )
 
 DatabaseSession = Annotated[Session, Depends(get_db)]
