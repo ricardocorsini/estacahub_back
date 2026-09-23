@@ -13,6 +13,7 @@ myenv/
 # Environment variables
 .env
 .env.*
+!.env.example
 
 # Distribution / packaging
 build/
