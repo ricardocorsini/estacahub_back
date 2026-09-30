@@ -10,8 +10,17 @@ from app.models.sondagem import LeituraSondagem, Sondagem
 from app.schemas.sondagens import SondagemCreate, SondagemUpdate
 
 
-def _garantir_obra_existe(db: Session, obra_id: int) -> None:
-    if db.get(Obra, obra_id) is None:
+def _garantir_obra_pertence_ao_usuario(
+    db: Session,
+    obra_id: int,
+    usuario_id: int,
+) -> None:
+    statement = select(Obra.id).where(
+        Obra.id == obra_id,
+        Obra.usuario_id == usuario_id,
+    )
+
+    if db.scalar(statement) is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Obra não encontrada.",
@@ -119,7 +128,7 @@ def listar_sondagens_service(
     obra_id: int,
     usuario_id: int,
 ) -> list[Sondagem]:
-    _garantir_obra_existe(db, obra_id)
+    _garantir_obra_pertence_ao_usuario(db, obra_id, usuario_id)
     statement = _statement_sondagem(obra_id, usuario_id).order_by(
         Sondagem.criado_em.asc(),
         Sondagem.id.asc(),
@@ -133,7 +142,7 @@ def criar_sondagem_service(
     usuario_id: int,
     payload: SondagemCreate,
 ) -> Sondagem:
-    _garantir_obra_existe(db, obra_id)
+    _garantir_obra_pertence_ao_usuario(db, obra_id, usuario_id)
 
     if _nome_ja_utilizado(db, obra_id, usuario_id, payload.nome):
         raise HTTPException(
@@ -165,6 +174,7 @@ def atualizar_sondagem_service(
     usuario_id: int,
     payload: SondagemUpdate,
 ) -> Sondagem:
+    _garantir_obra_pertence_ao_usuario(db, obra_id, usuario_id)
     sondagem = _obter_sondagem_ou_404(
         db,
         obra_id,
@@ -202,6 +212,7 @@ def remover_sondagem_service(
     sondagem_id: int,
     usuario_id: int,
 ) -> dict[str, str | int]:
+    _garantir_obra_pertence_ao_usuario(db, obra_id, usuario_id)
     sondagem = _obter_sondagem_ou_404(
         db,
         obra_id,

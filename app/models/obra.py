@@ -5,6 +5,8 @@ from sqlalchemy import (
     CheckConstraint,
     Date,
     DateTime,
+    ForeignKey,
+    Index,
     String,
     Text,
     func,
@@ -21,6 +23,10 @@ class Obra(Base):
             "sistema_coordenadas IN ('local', 'utm')",
             name="ck_obras_sistema_coordenadas",
         ),
+        Index(
+            "ix_obras_usuario_id",
+            "usuario_id",
+        ),
         {"schema": "app"},
     )
 
@@ -28,6 +34,15 @@ class Obra(Base):
         BigInteger,
         primary_key=True,
         autoincrement=True,
+    )
+    usuario_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey(
+            "app.usuarios.id",
+            name="fk_obras_usuario_id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
     )
     nome: Mapped[str] = mapped_column(
         String(200),

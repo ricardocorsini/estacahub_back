@@ -14,8 +14,16 @@ FAKE_S3_BUCKET = "engenharia-fullstack-local"
 FAKE_S3_REGION = "sa-east-1"
 
 
-def _obter_obra_ou_404(db: Session, obra_id: int) -> Obra:
-    obra = db.get(Obra, obra_id)
+def _obter_obra_ou_404(
+    db: Session,
+    obra_id: int,
+    usuario_id: int,
+) -> Obra:
+    statement = select(Obra).where(
+        Obra.id == obra_id,
+        Obra.usuario_id == usuario_id,
+    )
+    obra = db.scalar(statement)
 
     if obra is None:
         raise HTTPException(
@@ -52,17 +60,29 @@ def _commit(db: Session) -> None:
         ) from exc
 
 
-def listar_obras_service(db: Session) -> list[Obra]:
-    statement = select(Obra).order_by(Obra.id.desc())
+def listar_obras_service(
+    db: Session,
+    usuario_id: int,
+) -> list[Obra]:
+    statement = (
+        select(Obra)
+        .where(Obra.usuario_id == usuario_id)
+        .order_by(Obra.id.desc())
+    )
     return list(db.scalars(statement).all())
 
 
-def obter_obra_service(db: Session, obra_id: int) -> Obra:
-    return _obter_obra_ou_404(db, obra_id)
+def obter_obra_service(
+    db: Session,
+    obra_id: int,
+    usuario_id: int,
+) -> Obra:
+    return _obter_obra_ou_404(db, obra_id, usuario_id)
 
 
 def criar_obra_service(
     db: Session,
+    usuario_id: int,
     payload: ObraCreate,
 ) -> Obra:
     dados = payload.model_dump()
@@ -70,6 +90,7 @@ def criar_obra_service(
 
     nova_obra = Obra(
         **dados,
+        usuario_id=usuario_id,
         foto_url=(
             _gerar_url_s3_ficticia(nome_arquivo_foto)
             if nome_arquivo_foto
@@ -87,9 +108,10 @@ def criar_obra_service(
 def atualizar_obra_service(
     db: Session,
     obra_id: int,
+    usuario_id: int,
     payload: ObraCreate,
 ) -> Obra:
-    obra = _obter_obra_ou_404(db, obra_id)
+    obra = _obter_obra_ou_404(db, obra_id, usuario_id)
 
     dados = payload.model_dump()
     nome_arquivo_foto = dados.pop("nome_arquivo_foto", None)
@@ -109,9 +131,10 @@ def atualizar_obra_service(
 def atualizar_obra_parcial_service(
     db: Session,
     obra_id: int,
+    usuario_id: int,
     payload: ObraUpdate,
 ) -> Obra:
-    obra = _obter_obra_ou_404(db, obra_id)
+    obra = _obter_obra_ou_404(db, obra_id, usuario_id)
 
     dados = payload.model_dump(exclude_unset=True)
     nome_arquivo_foto = dados.pop("nome_arquivo_foto", None)
@@ -131,8 +154,9 @@ def atualizar_obra_parcial_service(
 def remover_obra_service(
     db: Session,
     obra_id: int,
+    usuario_id: int,
 ) -> dict[str, str | int]:
-    obra = _obter_obra_ou_404(db, obra_id)
+    obra = _obter_obra_ou_404(db, obra_id, usuario_id)
 
     db.delete(obra)
     _commit(db)

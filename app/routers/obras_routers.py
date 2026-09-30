@@ -1,10 +1,6 @@
-from typing import Annotated
+from fastapi import APIRouter, status
 
-from fastapi import APIRouter, Depends, status
-from sqlalchemy.orm import Session
-
-from app.core.database import get_db
-from app.core.security import get_current_user
+from app.core.security import CurrentUser, DatabaseSession
 from app.schemas.obras import (
     ObraCreate,
     ObraDeleteResponse,
@@ -24,10 +20,7 @@ from app.services.obras_service import (
 router = APIRouter(
     prefix="/obras",
     tags=["obras"],
-    dependencies=[Depends(get_current_user)],
 )
-
-DatabaseSession = Annotated[Session, Depends(get_db)]
 
 
 @router.get(
@@ -35,8 +28,11 @@ DatabaseSession = Annotated[Session, Depends(get_db)]
     response_model=list[ObraResponse],
     response_model_by_alias=True,
 )
-def listar_obras(db: DatabaseSession):
-    return listar_obras_service(db)
+def listar_obras(
+    db: DatabaseSession,
+    usuario: CurrentUser,
+):
+    return listar_obras_service(db, usuario.id)
 
 
 @router.post(
@@ -48,8 +44,9 @@ def listar_obras(db: DatabaseSession):
 def criar_obra(
     payload: ObraCreate,
     db: DatabaseSession,
+    usuario: CurrentUser,
 ):
-    return criar_obra_service(db, payload)
+    return criar_obra_service(db, usuario.id, payload)
 
 
 @router.get(
@@ -60,8 +57,9 @@ def criar_obra(
 def obter_obra(
     obra_id: int,
     db: DatabaseSession,
+    usuario: CurrentUser,
 ):
-    return obter_obra_service(db, obra_id)
+    return obter_obra_service(db, obra_id, usuario.id)
 
 
 @router.put(
@@ -73,8 +71,14 @@ def atualizar_obra(
     obra_id: int,
     payload: ObraCreate,
     db: DatabaseSession,
+    usuario: CurrentUser,
 ):
-    return atualizar_obra_service(db, obra_id, payload)
+    return atualizar_obra_service(
+        db,
+        obra_id,
+        usuario.id,
+        payload,
+    )
 
 
 @router.patch(
@@ -86,8 +90,14 @@ def atualizar_obra_parcial(
     obra_id: int,
     payload: ObraUpdate,
     db: DatabaseSession,
+    usuario: CurrentUser,
 ):
-    return atualizar_obra_parcial_service(db, obra_id, payload)
+    return atualizar_obra_parcial_service(
+        db,
+        obra_id,
+        usuario.id,
+        payload,
+    )
 
 
 @router.delete(
@@ -97,5 +107,6 @@ def atualizar_obra_parcial(
 def remover_obra(
     obra_id: int,
     db: DatabaseSession,
+    usuario: CurrentUser,
 ):
-    return remover_obra_service(db, obra_id)
+    return remover_obra_service(db, obra_id, usuario.id)
