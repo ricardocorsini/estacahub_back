@@ -7,6 +7,7 @@ from app.core.config import get_settings
 from app.core.database import init_db
 from app.routers.auth import router as auth_router
 from app.routers.health import router as health_router
+from app.routers.estacas import router as estacas_router
 from app.routers.obras_routers import router as obras_router
 from app.routers.sondagens import router as sondagens_router
 
@@ -84,6 +85,9 @@ app.include_router(
 )
 
 
+app.include_router(estacas_router, prefix="/api")
+
+
 # ============================================================
 # Root
 # ============================================================
@@ -97,4 +101,5 @@ def root() -> dict[str, str]:
         "auth": "/api/auth/login",
         "obras": "/api/obras",
         "sondagens": "/api/obras/{obra_id}/sondagens",
+        "estacas": "/api/obras/{obra_id}/estacas",
     }
