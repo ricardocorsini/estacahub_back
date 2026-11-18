@@ -44,3 +44,8 @@ cookie `HttpOnly`; outros clientes podem enviar o mesmo JWT em
 `Authorization: Bearer <token>`.
 
 Documentação interativa: `http://localhost:8000/docs`.
+
+## Carga admissível de estacas
+
+A rota de cálculo usa os cadastros de estacas e sondagens da obra e retorna as
+curvas de Décourt–Quaresma e Aoki–Velloso. [Contrato da API e critérios de cálculo](docs/carga-admissivel.md).
