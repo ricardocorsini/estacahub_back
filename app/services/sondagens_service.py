@@ -80,7 +80,7 @@ def _nome_ja_utilizado(
     return db.scalar(statement) is not None
 
 
-def _aplicar_payload(
+def aplicar_payload_sondagem(
     sondagem: Sondagem,
     payload: SondagemCreate | SondagemUpdate,
 ) -> None:
@@ -155,7 +155,7 @@ def criar_sondagem_service(
         usuario_id=usuario_id,
         nome=payload.nome,
     )
-    _aplicar_payload(sondagem, payload)
+    aplicar_payload_sondagem(sondagem, payload)
     db.add(sondagem)
     _commit(db)
 
@@ -194,7 +194,7 @@ def atualizar_sondagem_service(
             detail="Já existe uma sondagem com este nome nesta obra.",
         )
 
-    _aplicar_payload(sondagem, payload)
+    aplicar_payload_sondagem(sondagem, payload)
     sondagem.atualizado_em = datetime.now(timezone.utc)
     _commit(db)
 
