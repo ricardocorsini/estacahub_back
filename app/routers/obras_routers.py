@@ -7,6 +7,7 @@ from app.schemas.obras import (
     ObraResponse,
     ObraUpdate,
 )
+from app.services.obra_exemplo_service import abrir_exemplo_balsas
 from app.services.obras_service import (
     atualizar_obra_parcial_service,
     atualizar_obra_service,
@@ -47,6 +48,12 @@ def criar_obra(
     usuario: CurrentUser,
 ):
     return criar_obra_service(db, usuario.id, payload)
+
+
+@router.post("/exemplos/balsas", response_model=ObraResponse)
+def abrir_obra_exemplo(db: DatabaseSession, usuario: CurrentUser):
+    """Cria a cópia editável do caso Balsas ou abre a cópia existente da conta."""
+    return abrir_exemplo_balsas(db, usuario.id)
 
 
 @router.get(

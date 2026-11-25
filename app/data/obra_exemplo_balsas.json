@@ -1,0 +1,125 @@
+{
+  "obra": {
+    "nome": "Obra de Referência — Balsas",
+    "localizacao": "Balsas/MA",
+    "sistemaCoordenadas": "local",
+    "observacoes": "Obra de exemplo do GEOSPT-STRUCT. Cota de boca em altímetro absoluto; coordenadas inferidas para teste de interpolação."
+  },
+  "sondagens": [
+    {
+      "nome": "SPT-01",
+      "dadosCabecalho": {"cotaBoca": 254.485, "profundidadeFinal": 20, "criterio": "Impenetrável", "nivelAgua": null, "coordX": 0, "coordY": 0},
+      "leituras": [
+        {"profundidade": 1, "cota": 253.485, "nspt": 3, "solo": "Areia Silto-argilosa", "familia": "Granular"},
+        {"profundidade": 2, "cota": 252.485, "nspt": 4, "solo": "Areia Silto-argilosa", "familia": "Granular"},
+        {"profundidade": 3, "cota": 251.485, "nspt": 5, "solo": "Argila Siltosa", "familia": "Coesivo"},
+        {"profundidade": 4, "cota": 250.485, "nspt": 6, "solo": "Argila Siltosa", "familia": "Coesivo"},
+        {"profundidade": 5, "cota": 249.485, "nspt": 6, "solo": "Argila Siltosa", "familia": "Coesivo"},
+        {"profundidade": 6, "cota": 248.485, "nspt": 8, "solo": "Argila Siltosa", "familia": "Coesivo"},
+        {"profundidade": 7, "cota": 247.485, "nspt": 9, "solo": "Argila Siltosa", "familia": "Coesivo"},
+        {"profundidade": 8, "cota": 246.485, "nspt": 12, "solo": "Argila Siltosa", "familia": "Coesivo"},
+        {"profundidade": 9, "cota": 245.485, "nspt": 14, "solo": "Argila Siltosa", "familia": "Coesivo"},
+        {"profundidade": 10, "cota": 244.485, "nspt": 17, "solo": "Argila Siltosa", "familia": "Coesivo"},
+        {"profundidade": 11, "cota": 243.485, "nspt": 15, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 12, "cota": 242.485, "nspt": 12, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 13, "cota": 241.485, "nspt": 12, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 14, "cota": 240.485, "nspt": 22, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 15, "cota": 239.485, "nspt": 35, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 16, "cota": 238.485, "nspt": 35, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 17, "cota": 237.485, "nspt": 42, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 18, "cota": 236.485, "nspt": 43, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 19, "cota": 235.485, "nspt": 42, "solo": "Argila Silto-arenosa", "familia": "Coesivo"}
+      ]
+    },
+    {
+      "nome": "SPT-02",
+      "dadosCabecalho": {"cotaBoca": 254.088, "profundidadeFinal": 19, "criterio": "Impenetrável", "nivelAgua": null, "coordX": 25, "coordY": 0},
+      "leituras": [
+        {"profundidade": 1, "cota": 253.088, "nspt": 6, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 2, "cota": 252.088, "nspt": 6, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 3, "cota": 251.088, "nspt": 6, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 4, "cota": 250.088, "nspt": 11, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 5, "cota": 249.088, "nspt": 12, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 6, "cota": 248.088, "nspt": 13, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 7, "cota": 247.088, "nspt": 12, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 8, "cota": 246.088, "nspt": 12, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 9, "cota": 245.088, "nspt": 14, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 10, "cota": 244.088, "nspt": 21, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 11, "cota": 243.088, "nspt": 16, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 12, "cota": 242.088, "nspt": 25, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 13, "cota": 241.088, "nspt": 26, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 14, "cota": 240.088, "nspt": 38, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 15, "cota": 239.088, "nspt": 40, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 16, "cota": 238.088, "nspt": 44, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 17, "cota": 237.088, "nspt": 36, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 18, "cota": 236.088, "nspt": 38, "solo": "Areia Argilo-siltosa", "familia": "Granular"}
+      ]
+    },
+    {
+      "nome": "SPT-03",
+      "dadosCabecalho": {"cotaBoca": 254.885, "profundidadeFinal": 15, "criterio": "Impenetrável", "nivelAgua": null, "coordX": 0, "coordY": 25},
+      "leituras": [
+        {"profundidade": 1, "cota": 253.885, "nspt": 7, "solo": "Areia Argilosa", "familia": "Granular"},
+        {"profundidade": 2, "cota": 252.885, "nspt": 6, "solo": "Areia Argilosa", "familia": "Granular"},
+        {"profundidade": 3, "cota": 251.885, "nspt": 7, "solo": "Areia Argilosa", "familia": "Granular"},
+        {"profundidade": 4, "cota": 250.885, "nspt": 10, "solo": "Areia Argilosa", "familia": "Granular"},
+        {"profundidade": 5, "cota": 249.885, "nspt": 16, "solo": "Areia Argilosa", "familia": "Granular"},
+        {"profundidade": 6, "cota": 248.885, "nspt": 15, "solo": "Areia Argilosa", "familia": "Granular"},
+        {"profundidade": 7, "cota": 247.885, "nspt": 18, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 8, "cota": 246.885, "nspt": 15, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 9, "cota": 245.885, "nspt": 20, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 10, "cota": 244.885, "nspt": 18, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 11, "cota": 243.885, "nspt": 26, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 12, "cota": 242.885, "nspt": 29, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 13, "cota": 241.885, "nspt": 34, "solo": "Argila Areno-siltosa", "familia": "Coesivo"},
+        {"profundidade": 14, "cota": 240.885, "nspt": 43, "solo": "Areia Argilo-siltosa", "familia": "Granular"}
+      ]
+    },
+    {
+      "nome": "SPT-04",
+      "dadosCabecalho": {"cotaBoca": 254.819, "profundidadeFinal": 15, "criterio": "Impenetrável", "nivelAgua": null, "coordX": 25, "coordY": 25},
+      "leituras": [
+        {"profundidade": 1, "cota": 253.819, "nspt": 6, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 2, "cota": 252.819, "nspt": 4, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 3, "cota": 251.819, "nspt": 4, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 4, "cota": 250.819, "nspt": 9, "solo": "Areia Argilo-siltosa", "familia": "Granular"},
+        {"profundidade": 5, "cota": 249.819, "nspt": 10, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 6, "cota": 248.819, "nspt": 14, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 7, "cota": 247.819, "nspt": 15, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 8, "cota": 246.819, "nspt": 14, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 9, "cota": 245.819, "nspt": 18, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 10, "cota": 244.819, "nspt": 21, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 11, "cota": 243.819, "nspt": 26, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 12, "cota": 242.819, "nspt": 26, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 13, "cota": 241.819, "nspt": 32, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 14, "cota": 240.819, "nspt": 34, "solo": "Areia Argilo-siltosa", "familia": "Granular"}
+      ]
+    },
+    {
+      "nome": "SPT-05",
+      "dadosCabecalho": {"cotaBoca": 253.75, "profundidadeFinal": 15, "criterio": "Impenetrável", "nivelAgua": null, "coordX": 12.5, "coordY": 12.5},
+      "leituras": [
+        {"profundidade": 1, "cota": 252.75, "nspt": 4, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 2, "cota": 251.75, "nspt": 6, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 3, "cota": 250.75, "nspt": 7, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 4, "cota": 249.75, "nspt": 7, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 5, "cota": 248.75, "nspt": 9, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 6, "cota": 247.75, "nspt": 14, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 7, "cota": 246.75, "nspt": 13, "solo": "Argila Silto-arenosa", "familia": "Coesivo"},
+        {"profundidade": 8, "cota": 245.75, "nspt": 17, "solo": "Areia Silto-argilosa", "familia": "Granular"},
+        {"profundidade": 9, "cota": 244.75, "nspt": 24, "solo": "Areia Silto-argilosa", "familia": "Granular"},
+        {"profundidade": 10, "cota": 243.75, "nspt": 24, "solo": "Areia Silto-argilosa", "familia": "Granular"},
+        {"profundidade": 11, "cota": 242.75, "nspt": 29, "solo": "Areia Silto-argilosa", "familia": "Granular"},
+        {"profundidade": 12, "cota": 241.75, "nspt": 26, "solo": "Areia Silto-argilosa", "familia": "Granular"},
+        {"profundidade": 13, "cota": 240.75, "nspt": 26, "solo": "Areia Silto-argilosa", "familia": "Granular"},
+        {"profundidade": 14, "cota": 239.75, "nspt": 34, "solo": "Areia Silto-argilosa", "familia": "Granular"}
+      ]
+    }
+  ],
+  "estacas": [
+    {"nome": "E-01", "tipo": "helice_continua", "diametroCm": 40, "coordX": 12.5, "coordY": 12.5, "cotaArrasamento": 253, "cargaPrevistaTf": 50, "capacidadeEstruturalTf": 80},
+    {"nome": "E-02", "tipo": "helice_continua", "diametroCm": 40, "coordX": 5, "coordY": 5, "cotaArrasamento": 250, "cargaPrevistaTf": 40, "capacidadeEstruturalTf": 80},
+    {"nome": "E-03", "tipo": "raiz", "diametroCm": 30, "coordX": 5, "coordY": 16, "cotaArrasamento": 250, "cargaPrevistaTf": 110, "capacidadeEstruturalTf": 86.49539},
+    {"nome": "E-04", "tipo": "pre_moldada_cravada", "diametroCm": 30, "coordX": 16, "coordY": 5, "cotaArrasamento": 257, "cargaPrevistaTf": 45, "capacidadeEstruturalTf": 79.287441}
+  ]
+}
